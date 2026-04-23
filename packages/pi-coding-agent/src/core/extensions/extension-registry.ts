@@ -18,6 +18,8 @@ export interface ExtensionManifest {
   version: string;
   description: string;
   tier: "core" | "bundled" | "community";
+  /** When false, a fresh registry entry will be created as disabled. Defaults to true. */
+  defaultEnabled?: boolean;
   requires: { platform: string };
   provides?: {
     tools?: string[];
@@ -209,7 +211,7 @@ export function ensureRegistryEntries(extensionsDir: string): void {
     if (!registry.entries[id]) {
       registry.entries[id] = {
         id,
-        enabled: true,
+        enabled: manifest.defaultEnabled !== false,
         source: "bundled",
       };
       changed = true;
